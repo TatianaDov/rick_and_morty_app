@@ -63,7 +63,7 @@ const UserProvider = ({ children }) => {
         toggleLike,
       }}
     >
-      <div>{children}</div>
+      {children}
     </UserContext.Provider>
   );
 };

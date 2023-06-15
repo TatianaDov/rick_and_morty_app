@@ -21,6 +21,7 @@ function Cards({ card }) {
   return (
     <Card
       sx={{
+        width:'200px',
         position: "relative",
         borderRadius: "20px",
         display: "flex",
@@ -63,7 +64,7 @@ function Cards({ card }) {
         <Typography>Status: {card.status}</Typography>
         {isLike ? (
           <FavoriteIcon
-            onClick={handleDislike}
+          onClick={() => handleDislike(card.id)}
             sx={{
               color: "red",
               position: "absolute",

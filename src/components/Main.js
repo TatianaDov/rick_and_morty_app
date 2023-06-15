@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useTheme } from "@mui/material/styles";
 import Cards from "./Cards";
+
 function Main() {
   const { filtredCards, filterCards, filterLikeCards } =
     useContext(UserContext);
@@ -18,7 +19,7 @@ function Main() {
     setCardLoad(false);
     filterLikeCards();
   }
-  
+
   return (
     <div className="wrap">
       {!cardLoad ? (
@@ -75,4 +76,5 @@ function Main() {
     </div>
   );
 }
+
 export default Main;

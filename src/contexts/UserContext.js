@@ -6,10 +6,17 @@ export const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [cards, setCards] = useState([]);
   const [filtredCards, setFiltredCards] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [page, setPage] = useState(1);
+
+  const handleChange = (event, page) => {
+    setPage(page);
+  };
 
   const handleRemoveCard = (id) => {
     const deleteCard = cards.filter((card) => card.id !== id);
-    setFiltredCards(deleteCard);
+    setFiltredCards(deleteCard)
+    setCards(deleteCard);
   };
 
   const filterCards = () => {
@@ -35,7 +42,7 @@ const UserProvider = ({ children }) => {
     });
     setCards(card);
   };
-  
+
   const filterLikeCards = () => {
     setFiltredCards(cards);
   };
@@ -52,6 +59,19 @@ const UserProvider = ({ children }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(`https://rickandmortyapi.com/api/character?page=${page}`)
+      .then((data) => {
+        setCards([...data.data.results]);
+        setFiltredCards([...data.data.results]);
+        setPages({ ...data.data.info });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, [page]);
+
   return (
     <UserContext.Provider
       value={{
@@ -61,6 +81,9 @@ const UserProvider = ({ children }) => {
         handleRemoveCard,
         filterCards,
         toggleLike,
+        pages,
+        handleChange,
+        page,
       }}
     >
       {children}

@@ -18,6 +18,7 @@ function Cards({ card }) {
     setIsLike(false);
     deleteLike(id);
   }
+  
   return (
     <Card
       sx={{

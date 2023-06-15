@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import React from "react";
 import "./App.css";
-import Cards from "./components/Cards";
-
+import Header from "./components/Header";
+import Main from "./components/Main";
 function App() {
-  
   return (
     <div className="App">
-      <Typography variant="h4">Rick and Morty Characters</Typography>
-      {cards.map((card) => (
-        <Cards key={card.id} card={card} />
-      ))}
+      <Header />
+      <Main />
     </div>
   );
 }

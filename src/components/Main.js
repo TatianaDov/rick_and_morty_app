@@ -68,7 +68,7 @@ function Main() {
             Liked Cards
           </Button>
         )}
-        <Filters></Filters>
+        <Filters />
       </Box>
       {isSearching ? (
         <CircularProgress sx={{ marginTop: "100px" }} />

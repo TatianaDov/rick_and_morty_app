@@ -7,7 +7,7 @@ import { status, gender } from "../common/index";
 
 function Filters() {
   const theme = useTheme();
-  const { value, handleFilter } = useContext(UserContext);
+  const { values, handleFilter } = useContext(UserContext);
 
   return (
     <Box
@@ -35,13 +35,13 @@ function Filters() {
         variant="outlined"
         label="Name"
         onChange={(e) => handleFilter(e, "name")}
-        value={value.name}
+        value={values.name}
       />
       <FormControl fullWidth>
         <InputLabel id="status">Status</InputLabel>
         <Select
           onChange={(e) => handleFilter(e, "status")}
-          value={value.status}
+          value={values.status}
           labelId="status"
           id="status"
           label="Status"
@@ -57,7 +57,7 @@ function Filters() {
         <InputLabel id="gender">Gender</InputLabel>
         <Select
           onChange={(e) => handleFilter(e, "gender")}
-          value={value.gender}
+          value={values.gender}
           labelId="gender"
           id="gender"
           label="Gender"

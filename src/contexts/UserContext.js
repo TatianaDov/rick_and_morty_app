@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createContext } from "react";
-import { getData, getDataPage, getDataInfo } from "../api/AxiosApi";
-import useDebounce from "../hooks/use-debounce";
+import { getData, getDataPage, getDataInfo } from "../api";
+import useDebounce from "../hooks/useDebounce";
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
@@ -11,19 +11,19 @@ const UserProvider = ({ children }) => {
   const [page, setPage] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [value, setValue] = useState({
+  const [values, setValues] = useState({
     name: "",
     status: "",
     gender: "",
   });
-  const debouncedSearchTerm = useDebounce(value, 1000);
+  const debouncedSearchTerm = useDebounce(values, 500);
 
   const handleChange = (event, page) => {
     setPage(page);
   };
 
   const handleFilter = (event, str) => {
-    setValue({ ...value, [str]: event.target.value });
+    setValues({ ...values, [str]: event.target.value });
   };
 
   const handleRemoveCard = (id) => {
@@ -70,15 +70,14 @@ const UserProvider = ({ children }) => {
           setFiltredCards([...data.data.results]);
           setPages({ ...data.data.info });
         })
-        .catch(function (error) {
-          if (error) {
+        .catch((error) =>{
             setIsError(true)
             setIsSearching(false);
             setCards([]);
             setFiltredCards([]);
             console.log(error);
-          }
         });
+
     } else {
       setCards([]);
       setFiltredCards([]);
@@ -93,7 +92,7 @@ const UserProvider = ({ children }) => {
         setFiltredCards([...data.data.results]);
         setPages({ ...data.data.info });
       })
-      .catch(function (error) {
+      .catch((error)=>{
         console.log(error);
       });
   }, [page]);
@@ -104,7 +103,7 @@ const UserProvider = ({ children }) => {
         setCards([...data.data.results]);
         setFiltredCards([...data.data.results]);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   }, []);
@@ -121,7 +120,7 @@ const UserProvider = ({ children }) => {
         pages,
         handleChange,
         page,
-        value,
+        values,
         handleFilter,
         isSearching,
         isError

@@ -18,10 +18,10 @@ function Cards({ card }) {
     setIsLike(false);
     deleteLike(id);
   }
+  
   return (
     <Card
       sx={{
-        width:'200px',
         position: "relative",
         borderRadius: "20px",
         display: "flex",

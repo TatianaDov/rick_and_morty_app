@@ -1,15 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { createContext } from "react";
-import axios from "axios";
+import { getData, getDataPage, getDataInfo } from "../api";
+import useDebounce from "../hooks/useDebounce";
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [cards, setCards] = useState([]);
   const [filtredCards, setFiltredCards] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isSearching, setIsSearching] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [values, setValues] = useState({
+    name: "",
+    status: "",
+    gender: "",
+  });
+  const debouncedSearchTerm = useDebounce(values, 500);
+
+  const handleChange = (event, page) => {
+    setPage(page);
+  };
+
+  const handleFilter = (event, str) => {
+    setValues({ ...values, [str]: event.target.value });
+  };
 
   const handleRemoveCard = (id) => {
     const deleteCard = cards.filter((card) => card.id !== id);
     setFiltredCards(deleteCard);
+    setCards(deleteCard);
   };
 
   const filterCards = () => {
@@ -35,19 +55,55 @@ const UserProvider = ({ children }) => {
     });
     setCards(card);
   };
-  
+
   const filterLikeCards = () => {
     setFiltredCards(cards);
   };
 
   useEffect(() => {
-    axios
-      .get("https://rickandmortyapi.com/api/character")
+    if (debouncedSearchTerm) {
+      setIsSearching(true);
+      getDataInfo(debouncedSearchTerm)
+        .then((data) => {
+          setIsSearching(false);
+          setCards([...data.data.results]);
+          setFiltredCards([...data.data.results]);
+          setPages({ ...data.data.info });
+        })
+        .catch((error) =>{
+            setIsError(true)
+            setIsSearching(false);
+            setCards([]);
+            setFiltredCards([]);
+            console.log(error);
+        });
+
+    } else {
+      setCards([]);
+      setFiltredCards([]);
+      setPages({});
+    }
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    getDataPage(page)
+      .then((data) => {
+        setCards([...data.data.results]);
+        setFiltredCards([...data.data.results]);
+        setPages({ ...data.data.info });
+      })
+      .catch((error)=>{
+        console.log(error);
+      });
+  }, [page]);
+
+  useEffect(() => {
+    getData()
       .then((data) => {
         setCards([...data.data.results]);
         setFiltredCards([...data.data.results]);
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   }, []);
@@ -61,6 +117,13 @@ const UserProvider = ({ children }) => {
         handleRemoveCard,
         filterCards,
         toggleLike,
+        pages,
+        handleChange,
+        page,
+        values,
+        handleFilter,
+        isSearching,
+        isError
       }}
     >
       {children}

@@ -22,7 +22,6 @@ function Cards({ card }) {
   return (
     <Card
       sx={{
-        width:'200px',
         position: "relative",
         borderRadius: "20px",
         display: "flex",
